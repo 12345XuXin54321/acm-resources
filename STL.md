@@ -16,11 +16,9 @@ using namespace std;
 接下来的讲解中，会说明这个用法的复杂度，还有所需要包含的头文件和最少需要的C++版本。
 
 
-## 用法
+## 容器的使用
 
-### 基础的容器
-
-#### vector
+### vector
 * 介绍
 
 vector是封装后的顺序存储的大小可变的数组。
@@ -89,7 +87,7 @@ int main()
 0
 </pre>
 
-#### list
+### list
 * 介绍
 
 list是链表（一般是双向链表），可以以 $O(1)$ 的复杂度进行插入和删除操作（即花费常数的时间）。但是，链表的数据不是连续存放的，因此不能用下标访问。
@@ -183,7 +181,7 @@ int main()
 0
 </pre>
 
-#### queue
+### queue
 * 介绍
 queue是队列，满足先进先出（FIFO）的数据结构，即最先进入的元素最先弹出。
 * 复杂度
@@ -223,7 +221,7 @@ int main()
 22
 </pre>
 
-#### stack
+### stack
 * 介绍
 stack是栈，和队列相反，stack是满足先进后出（FILO）的数据结构，即最先进入的元素最后弹出
 * 复杂度
@@ -260,7 +258,121 @@ int main()
 3
 </pre>
 
-#### string
+### string
+* 介绍
+和c风格的字符串（char*）有所不同，string是c++风格的字符串。string是std里的一个类，里面的数据是顺序储存的。
+* 复杂度
+
+* 头文件
+```cpp
+// 注意不是 #include <string.h>
+#include <string>
+```
+#### 字符串拼接
+* 用法
+```cpp
+#include <string>
+#include <iostream>
+using namespace std;
+int main()
+{
+    string str = "aaabbb";
+
+    // 字符串拼接
+    string str_2 = "ccc";
+    cout << str + str_2 << "\n"
+         << str_2 + str << endl;
+
+    char c = 'd';
+    cout << str + c << endl;
+    cout << c + str << endl;
+
+    cout << str + "eeee" << "\n"
+         << str + 'f' << endl;
+    cout << "eeee" + str << "\n"
+         << 'f' + str << endl;
+
+    // 编译错误
+    // cout << "aaaa" + "bbbbb" << endl;
+}
+```
+* 输出
+<pre>
+aaabbbccc
+cccaaabbb
+aaabbbd
+daaabbb
+aaabbbeeee
+aaabbbf
+eeeeaaabbb
+faaabbb
+</pre>
+
+#### 输入单个字符串
+* 用法
+```cpp
+#include <string>
+#include <iostream>
+using namespace std;
+int main()
+{
+    string str;
+    cin >> str;
+    cout << str << endl;
+}
+```
+* 输入 1
+<pre>
+aaa
+</pre>
+* 输出 1
+<pre>
+aaa
+</pre>
+---
+* 输入 2
+<pre>
+aaa bbb
+</pre>
+* 输出 2
+<pre>
+aaa
+</pre>
+
+#### 输入一行
+* 用法
+```cpp
+#include <string>
+#include <iostream>
+using namespace std;
+int main()
+{
+    string str;
+    getline(cin, str);
+    cout << str << endl;
+}
+```
+* 输入
+<pre>
+aaa bbb
+</pre>
+* 输出
+<pre>
+aaa bbb
+</pre>
+
+
+### 小总结
+
+#### 遍历(c++98)
+
+#### 遍历(c++11)
+#### 迭代器
+#### 构造函数
+#### 公共的成员函数
+
+### set
+
 * 介绍
 * 复杂度
 
@@ -274,17 +386,7 @@ int main()
 <pre>
 </pre>
 
-#### 小总结
-
-##### 遍历(c++98)
-##### 遍历(c++11)
-##### 迭代器
-##### 构造函数
-##### 公共的成员函数
-
-### 加了算法的容器
-
-#### set
+### map
 
 * 介绍
 * 复杂度
@@ -299,7 +401,7 @@ int main()
 <pre>
 </pre>
 
-#### map
+### priority_queue
 
 * 介绍
 * 复杂度
@@ -314,7 +416,7 @@ int main()
 <pre>
 </pre>
 
-#### priority_queue
+### mulitset
 
 * 介绍
 * 复杂度
@@ -329,22 +431,7 @@ int main()
 <pre>
 </pre>
 
-#### mulitset
-
-* 介绍
-* 复杂度
-
-* 头文件
-```cpp
-```
-* 用法
-```cpp
-```
-* 输出
-<pre>
-</pre>
-
-#### unordered_map
+### unordered_map
 
 * 介绍
 * 复杂度
@@ -361,7 +448,7 @@ int main()
 
 ### 容器的嵌套使用
 
-### 算法
+## 算法
 
 ## 参考
 * https://zh.cppreference.com/
