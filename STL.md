@@ -11,9 +11,9 @@ using namespace std;
 ```
 不过 `#include <bits/stdc++.h>` **不是**标准C++的头文件，而是GNU ISO C++的头文件，一般只有 `gcc` 和 `clang` 支持，**大部分**的oj和竞赛**也支持**，具体要看oj的官方说明。
 
-`using namespace std;` 在平常写代码的时候最好不要用，用的话可能会有命名的冲突。如果非要用的话要注意，变量名、函数名不要取STL里面有的名字。如果不用的话，使用STL里的库时要添加限定名 `std::` ，比如 `std::vector<int> vec;` 和 `std::cout << "hello world!" << std::endl;`。
+`using namespace std;` 在平常写代码的时候用的话，容易造成命名的冲突。用的话要注意，变量名、函数名不要取STL里面有的名字。如果不用的话，使用STL里的库时要添加限定名 `std::` ，比如 `std::vector<int> vec;` 和 `std::cout << "hello world!" << std::endl;`。
 
-接下来的讲解中，会说明这个用法所需要包含的头文件和最少需要的C++版本。
+接下来的讲解中，会说明这个用法的复杂度，还有所需要包含的头文件和最少需要的C++版本。
 
 
 ## 用法
@@ -25,7 +25,9 @@ using namespace std;
 
 vector是封装后的顺序存储的大小可变的数组。
 
-简单来说就是数组，数据是连续储存的。可以用下标访问。
+简单来说可以当作数组，数据是连续储存的。可以用下标访问。
+* 复杂度
+
 * 头文件
 ```cpp
 #include <vector>
@@ -76,11 +78,23 @@ int main()
     cout << vec.size() << endl;
 }
 ```
+* 输出
+<pre>
+10
+20
+100
+10 100 30 
+10 100 
+2
+0
+</pre>
 
 #### list
 * 介绍
 
-list是链表（一般是双向链表），可以以$O(1)$的复杂度进行插入和删除操作（即花费常数的时间）。但是，链表的数据不是连续存放的，因此不能用下标访问。
+list是链表（一般是双向链表），可以以 $O(1)$ 的复杂度进行插入和删除操作（即花费常数的时间）。但是，链表的数据不是连续存放的，因此不能用下标访问。
+* 复杂度
+
 * 头文件
 ```cpp
 #include <list>
@@ -101,11 +115,17 @@ int main()
     l.push_back(20);
     l.push_back(30);
 
+    // 遍历元素，同vector，需要C++11
+    for(auto n : l)
+    {
+        cout << n << " ";
+    }
+    cout << endl;
+
     //向开头添加元素
     l.push_front(44);
     l.push_front(55);
 
-    // 遍历元素，同vector，需要C++11
     for(auto n : l)
     {
         cout << n << " ";
@@ -122,7 +142,28 @@ int main()
     cout << endl;
 
     // 更改、删除元素需要使用迭代器
-    .....
+    // auto实际为list<int>::iterator
+    auto itor = l.begin();
+    itor++;
+    cout << *itor << endl;
+    
+    itor++;
+    // 更改元素
+    *itor = 2333;
+    for(auto n : l)
+    {
+        cout << n << " ";
+    }
+    cout << endl;
+
+    itor++;
+    // 删除元素
+    l.erase(itor);
+    for(auto n : l)
+    {
+        cout << n << " ";
+    }
+    cout << endl;
 
     cout << l.size() << endl;
     // 清空list
@@ -130,38 +171,114 @@ int main()
     cout << l.size() << endl;
 }
 ```
+* 输出
+<pre>
+10 20 30 
+55 44 10 20 30 
+55 44 10 20 
+44
+55 44 2333 20 
+55 44 2333 
+3
+0
+</pre>
 
 #### queue
 * 介绍
+queue是队列，满足先进先出（FIFO）的数据结构，即最先进入的元素最先弹出。
+* 复杂度
+
 * 头文件
 ```cpp
+#include <queue>
 ```
 * 用法
 ```cpp
+#include <queue>
+#include <iostream>
+using namespace std;
+int main()
+{
+    queue<int> q;
+    // 向队尾插入元素
+    q.push(11);
+    q.push(22);
+    q.push(33);
+    q.push(44);
+
+    // 访问队头元素
+    cout << q.front() << endl;
+    // 访问队尾元素
+    cout << q.back() << endl;
+
+    // 弹出队头元素
+    q.pop();
+    cout << q.front() << endl;
+}
 ```
+* 输出
+<pre>
+11
+44
+22
+</pre>
 
 #### stack
 * 介绍
-* 头文件
-```cpp
-```
-* 用法
-```cpp
-```
+stack是栈，和队列相反，stack是满足先进后出（FILO）的数据结构，即最先进入的元素最后弹出
+* 复杂度
 
-#### list
+* 头文件
+```cpp
+#include <stack>
+```
+* 用法
+```cpp
+#include <stack>
+#include <iostream>
+using namespace std;
+int main()
+{
+    stack<int> s;
+    // 添加元素
+    s.push(1);
+    s.push(2);
+    s.push(3);
+    s.push(4);
+
+    // 访问栈顶元素
+    cout << s.top() << endl;
+
+    // 弹出栈顶元素
+    s.pop();
+    cout << s.top() << endl;
+}
+```
+* 输出
+<pre>
+4
+3
+</pre>
+
+#### string
 * 介绍
+* 复杂度
+
 * 头文件
 ```cpp
 ```
 * 用法
 ```cpp
 ```
+* 输出
+<pre>
+</pre>
 
 #### 小总结
 
 ##### 遍历(c++98)
 ##### 遍历(c++11)
+##### 迭代器
 ##### 构造函数
 ##### 公共的成员函数
 
@@ -169,13 +286,82 @@ int main()
 
 #### set
 
+* 介绍
+* 复杂度
+
+* 头文件
+```cpp
+```
+* 用法
+```cpp
+```
+* 输出
+<pre>
+</pre>
+
 #### map
+
+* 介绍
+* 复杂度
+
+* 头文件
+```cpp
+```
+* 用法
+```cpp
+```
+* 输出
+<pre>
+</pre>
 
 #### priority_queue
 
+* 介绍
+* 复杂度
+
+* 头文件
+```cpp
+```
+* 用法
+```cpp
+```
+* 输出
+<pre>
+</pre>
+
+#### mulitset
+
+* 介绍
+* 复杂度
+
+* 头文件
+```cpp
+```
+* 用法
+```cpp
+```
+* 输出
+<pre>
+</pre>
+
 #### unordered_map
 
-### 容器的遍历
+* 介绍
+* 复杂度
+
+* 头文件
+```cpp
+```
+* 用法
+```cpp
+```
+* 输出
+<pre>
+</pre>
+
+### 容器的嵌套使用
 
 ### 算法
 
+## 参考
+* https://zh.cppreference.com/
