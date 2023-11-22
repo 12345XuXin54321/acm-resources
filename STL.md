@@ -139,13 +139,12 @@ int main()
     }
     cout << endl;
 
-    // 更改、删除元素需要使用迭代器
+    // 更改、插入、删除元素需要使用迭代器
     // auto实际为list<int>::iterator
     auto itor = l.begin();
     itor++;
     cout << *itor << endl;
     
-    itor++;
     // 更改元素
     *itor = 2333;
     for(auto n : l)
@@ -154,7 +153,15 @@ int main()
     }
     cout << endl;
 
-    itor++;
+    // 插入元素
+    // 在迭代器的前面插入元素
+    l.insert(itor, 1000);
+    for(auto n : l)
+    {
+        cout << n << " ";
+    }
+    cout << endl;
+
     // 删除元素
     l.erase(itor);
     for(auto n : l)
@@ -175,14 +182,16 @@ int main()
 55 44 10 20 30 
 55 44 10 20 
 44
-55 44 2333 20 
-55 44 2333 
-3
+55 2333 10 20 
+55 1000 2333 10 20 
+55 1000 10 20 
+4
 0
 </pre>
 
 ### queue
 * 介绍
+
 queue是队列，满足先进先出（FIFO）的数据结构，即最先进入的元素最先弹出。
 * 复杂度
 
@@ -223,6 +232,7 @@ int main()
 
 ### stack
 * 介绍
+
 stack是栈，和队列相反，stack是满足先进后出（FILO）的数据结构，即最先进入的元素最后弹出
 * 复杂度
 
@@ -260,6 +270,7 @@ int main()
 
 ### string
 * 介绍
+
 和c风格的字符串（char*）有所不同，string是c++风格的字符串。string是std里的一个类，里面的数据是顺序储存的。
 * 复杂度
 
@@ -364,12 +375,39 @@ aaa bbb
 
 ### 小总结
 
-#### 遍历(c++98)
-
-#### 遍历(c++11)
+#### 遍历容器(c++98)
+需要用到迭代器
+```cpp
+#include <list>
+#include <iostream>
+using namespace std;
+int main()
+{
+    list<int> l({1, 2, 3, 4});
+    for (list<int>::iterator itor = l.begin();
+         itor != l.end();
+         itor++)
+    {
+        cout << *itor << endl;
+    }
+}
+```
+#### 遍历容器(c++11)
+```cpp
+#include <list>
+#include <iostream>
+using namespace std;
+int main()
+{
+    list<int> l({1, 2, 3, 4});
+    for (auto n : l)
+    {
+        cout << n << endl;
+    }
+}
+```
 #### 迭代器
 #### 构造函数
-#### 公共的成员函数
 
 ### set
 
