@@ -38,17 +38,16 @@ using namespace std;
 int main()
 {
     // 定义vector时需要指定要存储的变量的类型
-    // 格式为 vector<类型> 变量名;
-    vector<int> vec;
+    // 格式为 vector<类型> 变量名(初始大小);
+    vector<int> vec(5);
 
     // 向末尾添加元素
     vec.push_back(10);
     vec.push_back(20);
-    vec.push_back(30);
 
     // 访问、更改元素
-    cout << vec[0] << "\n";
-    cout << vec[1] << "\n";
+    cout << vec[0] << " " << vec[1] << "\n"
+         << vec[5] << " " << vec[6] << "\n";
 
     vec[1] = 100;
     cout << vec[1] << "\n";
@@ -78,12 +77,12 @@ int main()
 ```
 * 输出
 <pre>
-10
-20
+0 0
+10 20
 100
-10 100 30 
-10 100 
-2
+0 100 0 0 0 10 20 
+0 100 0 0 0 10 
+6
 0
 </pre>
 
@@ -463,6 +462,108 @@ int main()
 
 * 介绍
 
+set是元素不重复的集合，里面的数据是有序的，可以以对数的复杂度进行搜索、插入和删除。通常以红黑树实现。
+* 复杂度
+
+搜索、插入和删除操作$O(N \cdot logN)$
+* 头文件
+```cpp
+#include <set>
+```
+* 用法
+```cpp
+#include <set>
+#include <iostream>
+using namespace std;
+void print_set(set<int>& s)
+{
+    for(auto n : s)
+    {
+        cout << n << " ";
+    }
+    cout << "\n";
+}
+int main()
+{
+    set<int> s;
+
+    // 插入元素
+    s.insert(11);
+    s.insert(22);
+    s.insert(33);
+    s.insert(33);
+    s.insert(44);
+
+    print_set(s);
+
+    // 获取元素的个数
+    cout << s.count(33) << endl;
+
+    // 查找元素
+    auto itor = s.find(44);
+    if(itor != s.end())
+    {
+        cout << "找到" << *itor << endl;
+    }
+    else
+    {
+        cout << "没找到" << endl;
+    }
+
+    // 删除元素
+    s.erase(22);
+    print_set(s);
+}
+```
+* 输出
+<pre>
+11 22 33 44 
+1
+找到44
+11 33 44 
+</pre>
+
+* 使用自定义类型
+```cpp
+#include <set>
+#include <iostream>
+struct my_type
+{
+    int a, b;
+    my_type() {}
+    my_type(int ia, int ib)
+    {
+        a = ia, b = ib;
+    }
+
+    // 需要重载小于号
+    bool operator<(const my_type& r) const
+    {
+        return a < r.
+    }
+};
+using namespace std;
+int main()
+{
+    
+}
+```
+* 输出
+<pre>
+</pre>
+
+* 使用自定义比较函数
+```cpp
+```
+* 输出
+<pre>
+</pre>
+
+### mulitset
+
+* 介绍
+
+可以有多个相同
 * 复杂度
 
 * 头文件
@@ -490,37 +591,22 @@ int main()
 <pre>
 </pre>
 
-### priority_queue
-
-* 介绍
-* 复杂度
-
-* 头文件
-```cpp
-```
-* 用法
-```cpp
-```
-* 输出
-<pre>
-</pre>
-
-### mulitset
-
-* 介绍
-* 复杂度
-
-* 头文件
-```cpp
-```
-* 用法
-```cpp
-```
-* 输出
-<pre>
-</pre>
-
 ### unordered_map
+
+* 介绍
+* 复杂度
+
+* 头文件
+```cpp
+```
+* 用法
+```cpp
+```
+* 输出
+<pre>
+</pre>
+
+### priority_queue
 
 * 介绍
 * 复杂度
