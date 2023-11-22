@@ -537,73 +537,375 @@ struct my_type
     }
 
     // 需要重载小于号
-    bool operator<(const my_type& r) const
+    bool operator<(const my_type &r) const
     {
-        return a < r.
+        return a < r.a || (a == r.a && b < r.b);
     }
 };
 using namespace std;
 int main()
 {
-    
+    set<my_type> s;
+    s.insert(my_type(1, 2));
+    s.insert(my_type(33, 11));
+    s.insert(my_type(-44, 22));
+    s.insert(my_type(33, 11));
+    s.insert(my_type(33, 22));
+
+    for (auto d : s)
+    {
+        cout << d.a << " " << d.b << "\n";
+    }
 }
 ```
 * 输出
 <pre>
+-44 22
+1 2
+33 11
+33 22
 </pre>
 
 * 使用自定义比较函数
 ```cpp
+#include <set>
+#include <iostream>
+using namespace std;
+struct my_type
+{
+    int a, b;
+    my_type() {}
+    my_type(int ia, int ib)
+    {
+        a = ia, b = ib;
+    }
+};
+// 需要比较的结构体
+struct cmp
+{
+    // 重载括号
+    bool operator()(const my_type &l, const my_type &r) const
+    {
+        return l.a > r.a || (l.a == r.a && l.b > r.b);
+    }
+};
+int main()
+{
+    set<my_type, cmp> s;
+    s.insert(my_type(1, 2));
+    s.insert(my_type(33, 11));
+    s.insert(my_type(-44, 22));
+    s.insert(my_type(33, 11));
+    s.insert(my_type(33, 22));
+
+    for (auto d : s)
+    {
+        cout << d.a << " " << d.b << "\n";
+    }
+}
 ```
 * 输出
 <pre>
+33 22
+33 11
+1 2
+-44 22
 </pre>
 
-### mulitset
+### multiset
 
 * 介绍
 
-可以有多个相同
+可以有多个相同元素的set
 * 复杂度
 
+同set
 * 头文件
 ```cpp
+#include <set>
 ```
 * 用法
 ```cpp
+#include <set>
+#include <iostream>
+using namespace std;
+void print_set(multiset<int>& s)
+{
+    for(auto n : s)
+    {
+        cout << n << " ";
+    }
+    cout << "\n";
+}
+int main()
+{
+    multiset<int> s;
+
+    // 插入元素
+    s.insert(11);
+    s.insert(22);
+    s.insert(33);
+    s.insert(33);
+    s.insert(44);
+
+    print_set(s);
+
+    // 获取元素的个数
+    cout << s.count(33) << endl;
+
+    // 删除元素
+    s.erase(33);
+    print_set(s);
+}
 ```
 * 输出
 <pre>
+11 22 33 33 44 
+2
+11 22 44 
 </pre>
 
 ### map
 
 * 介绍
+map是映射，可以提供键（key）到数据的映射。在map中，键是有序且唯一的。底层实现一般是红黑树。
 * 复杂度
 
+搜索、插入和删除操作$O(N \cdot logN)$
 * 头文件
 ```cpp
+#include <map>
 ```
 * 用法
 ```cpp
+#include <map>
+#include <iostream>
+using namespace std;
+int main()
+{
+    // 从int映射到string
+    map<int, string> m;
+
+    // 添加映射
+    m[1] = "Mon";
+    m[2] = "Tues";
+    m[3] = "Wed";
+    m[4] = "Thur";
+    m[5] = "Fir";
+
+    // 访问
+    cout << "今天是" << m[2] << endl;
+
+    // 遍历的时候，p是键值对
+    for (auto p : m)
+    {
+        cout << p.first << " " << p.second << "\n";
+    }
+
+    // 删除元素
+    m.erase(3);
+
+    for (auto itor = m.begin(); itor != m.end(); itor++)
+    {
+        cout << (*itor).first << " " << (*itor).second << "\n";
+    }
+}
 ```
 * 输出
 <pre>
+今天是Tues
+1 Mon
+2 Tues
+3 Wed
+4 Thur
+5 Fir
+1 Mon
+2 Tues
+4 Thur
+5 Fir
+</pre>
+
+* 使用自定义类型
+自定义类型作为key是要重载小于号
+```cpp
+#include <map>
+#include <iostream>
+using namespace std;
+struct my_type
+{
+    int a, b;
+    my_type() {}
+    my_type(int ia, int ib)
+    {
+        a = ia, b = ib;
+    }
+
+    // 需要重载小于号
+    bool operator<(const my_type &r) const
+    {
+        return a < r.a || (a == r.a && b < r.b);
+    }
+};
+
+struct my_type_2
+{
+    int a, b;
+    my_type_2() {}
+    my_type_2(int ia, int ib)
+    {
+        a = ia, b = ib;
+    }
+};
+
+int main()
+{
+    map<my_type, my_type_2> m;
+    m[my_type(1, 2)] = my_type_2(8, 3);
+    m[my_type(12, 2)] = my_type_2(21, 13);
+    m[my_type(-1, -2)] = my_type_2(7, 43);
+    m[my_type(22, 22)] = my_type_2(2, 43);
+    m[my_type(1, 2)] = my_type_2(22, 3);
+
+    for (auto p : m)
+    {
+        cout << p.first.a << " " << p.first.b << " -> "
+             << p.second.a << " " << p.second.b << "\n";
+    }
+}
+```
+* 输出
+<pre>
+-1 -2 -> 7 43
+1 2 -> 22 3
+12 2 -> 21 13
+22 22 -> 2 43
 </pre>
 
 ### unordered_map
 
 * 介绍
+
+利用hash的map，有不重复的键。元素在容器内部没有按特定顺序排序，而是利用哈希放到对应的桶里。
 * 复杂度
 
+没有hash冲突的时候，搜索、插入、删除时间复杂度为$O(1)$
 * 头文件
 ```cpp
+#include <unordered_map>
 ```
 * 用法
 ```cpp
+#include <unordered_map>
+#include <iostream>
+using namespace std;
+int main()
+{
+    // 从int映射到string
+    unordered_map<int, string> m;
+
+    // 添加映射
+    m[1] = "Mon";
+    m[2] = "Tues";
+    m[3] = "Wed";
+    m[4] = "Thur";
+    m[5] = "Fir";
+
+    // 访问
+    cout << "今天是" << m[2] << endl;
+
+    // 遍历的时候，p是键值对
+    for (auto p : m)
+    {
+        cout << p.first << " " << p.second << "\n";
+    }
+
+    // 删除元素
+    m.erase(3);
+
+    for (auto itor = m.begin(); itor != m.end(); itor++)
+    {
+        cout << (*itor).first << " " << (*itor).second << "\n";
+    }
+}
 ```
 * 输出
 <pre>
+今天是Tues
+5 Fir
+4 Thur
+3 Wed
+2 Tues
+1 Mon
+5 Fir
+4 Thur
+2 Tues
+1 Mon
+</pre>
+
+* 使用自定义类型
+自定义类型需要定义hash函数，和判断相等的函数
+```cpp
+#include <unordered_map>
+#include <iostream>
+using namespace std;
+struct my_type
+{
+    int a, b;
+    my_type() {}
+    my_type(int ia, int ib)
+    {
+        a = ia, b = ib;
+    }
+    // 需要判断相等，重载==
+    bool operator==(const my_type &r) const
+    {
+        return a == r.a && b == r.b;
+    }
+};
+// 定义结构体，重载括号
+struct my_hash
+{
+    size_t operator()(const my_type &c) const
+    {
+        // 自己写一个hash函数
+        return c.a * 23 + c.b;
+    }
+};
+int main()
+{
+    unordered_map<my_type, int, my_hash> m;
+    m[my_type(1, 2)] = 1;
+    m[my_type(2, 3)] = 2;
+    m[my_type(3, 4)] = 3;
+    m[my_type(5, 6)] = 4;
+    for (auto p : m)
+    {
+        cout << p.first.a << " " << p.first.b << " -> "
+             << p.second << "\n";
+    }
+    cout << "------\n";
+
+    // hash冲突
+    m[my_type(0, 25)] = 5;
+    for (auto p : m)
+    {
+        cout << p.first.a << " " << p.first.b << " -> "
+             << p.second << "\n";
+    }
+}
+```
+* 输出
+<pre>
+5 6 -> 4
+3 4 -> 3
+2 3 -> 2
+1 2 -> 1
+------
+5 6 -> 4
+3 4 -> 3
+2 3 -> 2
+0 25 -> 5
+1 2 -> 1
 </pre>
 
 ### priority_queue
