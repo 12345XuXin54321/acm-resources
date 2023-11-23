@@ -475,9 +475,9 @@ set是元素不重复的集合，里面的数据是有序的，可以以对数�
 #include <set>
 #include <iostream>
 using namespace std;
-void print_set(set<int>& s)
+void print_set(set<int> &s)
 {
-    for(auto n : s)
+    for (auto n : s)
     {
         cout << n << " ";
     }
@@ -501,13 +501,25 @@ int main()
 
     // 查找元素
     auto itor = s.find(44);
-    if(itor != s.end())
+    if (itor != s.end())
     {
         cout << "找到" << *itor << endl;
     }
     else
     {
         cout << "没找到" << endl;
+    }
+
+    // 首个不小于给定值的迭代器
+    cout << *(s.lower_bound(33)) << endl;
+    // 首个大于给定值的迭代器
+    cout << *(s.upper_bound(33)) << endl;
+
+    // 返回特定值元素范围
+    auto itor_pir = s.equal_range(33);
+    for (auto itor = itor_pir.first; itor != itor_pir.second; itor++)
+    {
+        cout << *itor << endl;
     }
 
     // 删除元素
@@ -520,6 +532,9 @@ int main()
 11 22 33 44 
 1
 找到44
+33
+44
+33
 11 33 44 
 </pre>
 
@@ -958,6 +973,61 @@ int main()
 </pre>
 
 ### 容器的嵌套使用
+
+大部分的stl容器可以相互嵌套使用，只需要把容器的类型写到模板那里。
+
+* vector动态二维数组
+```cpp
+#include <vector>
+#include <iostream>
+using namespace std;
+int main()
+{
+    vector<vector<int>> arr;
+    int m, n;
+    cin >> m >> n;
+    for (int i = 0; i < m; i++)
+    {
+        // 在末尾添加空的vector<int>
+        arr.push_back(vector<int>());
+        for (int j = 0; j < n; j++)
+        {
+            int num;
+            cin >> num;
+            // arr[i]的类型是vector<int>
+            arr[i].push_back(num);
+        }
+    }
+
+    for (int i = 0; i < m; i++)
+    {
+        for (int j = 0; j < n; j++)
+        {
+            cout << arr[i][j] << " ";
+        }
+        cout << "\n";
+    }
+}
+```
+* 输入
+<pre>
+5 7
+11 22 33 44 55 66 77
+88 99 10 12 13 14 15
+16 17 18 19 20 21 23
+24 25 26 27 28 29 30
+31 32 34 35 36 37 38
+</pre>
+* 输出
+<pre>
+11 22 33 44 55 66 77 
+88 99 10 12 13 14 15 
+16 17 18 19 20 21 23 
+24 25 26 27 28 29 30 
+31 32 34 35 36 37 38 
+</pre>
+
+* 
 
 ## 算法
 
