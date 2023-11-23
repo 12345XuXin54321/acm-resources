@@ -911,16 +911,50 @@ int main()
 ### priority_queue
 
 * 介绍
+
+priority_queue是优先队列，在压入数据之后，可以按照一定顺序弹出（默认弹出数据中的最大值）
 * 复杂度
 
+查找最大值$O(1)$
+
+插入元素$O(logn)$
 * 头文件
 ```cpp
+#include <queue>
 ```
 * 用法
 ```cpp
+#include <queue>
+#include <iostream>
+using namespace std;
+int main()
+{
+    // 如果是自定义类型，需要重载小于号，或者写比较函数
+    // priority_queue<int, vector<int>, cmp> q;
+    priority_queue<int> q;
+    // 添加元素
+    q.push(22);
+    q.push(11);
+    q.push(33);
+    q.push(44);
+    q.push(11);
+
+    while (q.size() != 0)
+    {
+        // 获取最大的元素
+        cout << q.top() << endl;
+        // 弹出元素
+        q.pop();
+    }
+}
 ```
 * 输出
 <pre>
+44
+33
+22
+11
+11
 </pre>
 
 ### 容器的嵌套使用
