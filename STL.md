@@ -1096,7 +1096,5 @@ naruto
 2
 </pre>
 
-## 算法
-
 ## 参考
 * https://zh.cppreference.com/
