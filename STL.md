@@ -392,7 +392,11 @@ aaa bbb
 using namespace std;
 int main()
 {
-    list<int> l({1, 2, 3, 4});
+    list<int> l;
+    l.push_back(1);
+    l.push_back(2);
+    l.push_back(3);
+    l.push_back(4);
     for (list<int>::iterator itor = l.begin();
          itor != l.end();
          itor++)
