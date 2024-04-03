@@ -1114,5 +1114,19 @@ naruto
 2
 </pre>
 
+## 题单
+
+| 序号  | 题号      | 标题                      | 题型          | 难度评级  |
+|-------|-----------|---------------------------|---------------|-----------|
+| 1     | P1059     | 明明的随机数              | 排序          | ⭐        |
+| 2     | P1739     | 表达式括号匹配            | 栈、string    | ⭐        |
+| 3     | P1090     | 合并果子                  | 优先队列      | ⭐⭐      |
+| 4     | P3879     | 阅读理解                  | map           | ⭐⭐⭐    |
+| 5     | P1165     | 日志分析                  | 栈、map       | ⭐⭐      |
+| 6     | abc308_b  | Default Price             | map、string   | ⭐⭐      |
+| 7     | abc307_d  | Mismatched Parentheses    | 栈、string    | ⭐⭐      |
+| 8     | abc329_f  | Colored Ball              | set           | ⭐⭐⭐    |
+| 9     | abc295_c  | Socks                     | map           | ⭐⭐      |
+
 ## 参考
 * https://zh.cppreference.com/
