@@ -32,7 +32,7 @@
 * **树的高度**：根结点的深度
 * **子树**：删去与父结点相连的边和父结点所在的子图后，剩下的子图
 
-![子树](https://oi-wiki.org/graph/images/tree-definition-subtree.svg)
+![子树](img/oi-wiki/tree-definition-subtree.svg)
 
 ## 树的种类
 
@@ -42,13 +42,13 @@
 * **完全二叉树**：只有最下面两层的结点度数小于2，
 且最下面一层的结点都集中在该层最左边开始的连续位置上。
 
-![完全二叉树](https://oi-wiki.org/graph/images/tree-binary-complete.svg)
+![完全二叉树](img/oi-wiki/tree-binary-complete.svg)
 
 
 * **满二叉树**：所有叶子结点的深度都相同，且非叶子结点的子结点数量均为2的二叉树
 称作满二叉树（完美二叉树）。
 
-![满二叉树](https://oi-wiki.org/graph/images/tree-binary-perfect.svg)
+![满二叉树](img/oi-wiki/tree-binary-perfect.svg)
 
 ## 树的储存
 
@@ -109,7 +109,7 @@ void preorder(int rooti)
 }
 ```
 
-![前序遍历](https://oi-wiki.org/graph/images/tree-basic-preorder.svg)
+![前序遍历](img/oi-wiki/tree-basic-preorder.svg)
 
 
 #### 中序遍历
@@ -128,7 +128,7 @@ void inorder(int rooti)
 }
 ```
 
-![中序遍历](https://oi-wiki.org/graph/images/tree-basic-inorder.svg)
+![中序遍历](img/oi-wiki/tree-basic-inorder.svg)
 
 
 #### 后序遍历
@@ -147,7 +147,7 @@ void postorder(int rooti)
 }
 ```
 
-![后序遍历](https://oi-wiki.org/graph/images/tree-basic-postorder.svg)
+![后序遍历](img/oi-wiki/tree-basic-postorder.svg)
 
 #### 反推
 
