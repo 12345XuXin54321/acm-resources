@@ -230,6 +230,10 @@ void postorder(int rooti)
 4
 </pre>
 
+* 输入的树
+
+![img](img/unrootedtree.svg)
+
 
 ## 题单
 
