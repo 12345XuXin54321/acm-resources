@@ -4,9 +4,10 @@
 
 设矩阵 $\pmb{A}$ 的大小为 $P \times M$ ，
 $\pmb{B}$ 的大小为 $M \times Q$ ，
-矩阵 $ \pmb{C} = \pmb{A} \times \pmb{B} $
-，则 $ \pmb{C} $ 的第 $i$ 行第 $j$ 列的元素可以表示为
-$$ C_{i,j} = \sum^{M}_{k=1} A_{i,k} B_{k,j} $$
+矩阵 $\pmb{C} = \pmb{A} \times \pmb{B} $
+，则 $\pmb{C}$ 的第 $i$ 行第 $j$ 列的元素可以表示为
+
+$$ C_{i,j} = \sum_{k = 1}^{m}  A_{i,k} B_{k,j} $$
 
 下面是矩阵相乘的代码， `max_len` 为矩阵最大的大小。
 
@@ -54,9 +55,11 @@ struct MX
 矩阵乘法满足结合律，不满足一般的交换律。
 满足结合率，就可以用快速幂来优化矩阵的幂。
 
-设 $ x \geq 1 $ ，容易看出
-$$ \pmb{A}^{2x} = \pmb{A}^x \times \pmb{A}^x $$
-$$ \pmb{A}^{2x+1} = \pmb{A}^x \times \pmb{A}^x \times \pmb{A} $$
+设 $x > 0$ ，容易看出
+
+$$\pmb{A}^{2x} = \pmb{A}^x \times \pmb{A}^x $$
+
+$$\pmb{A}^{2x+1} = \pmb{A}^x \times \pmb{A}^x \times \pmb{A} $$
 
 因此可以想到用递归来求解。
 
@@ -87,8 +90,8 @@ MX mx_qpow(MX x, int n)
 ```
 
 如果每次的矩阵都相同，
-也可以存下 $ \pmb{A}^{2^i} $ ，每次计算快速幂时，
-如果 $n$ 的二进制下的第 $i$ 为为 $1$ ，则乘上 $ \pmb{A}^{2^i} $
+也可以存下 $\pmb{A}^{2^i} $，每次计算快速幂时，
+如果 $n$ 的二进制下的第 $i$ 为 $1$ ，则乘上 $\pmb{A}^{2^i} $
 
 ```cpp
 #define max_pow_n 32
