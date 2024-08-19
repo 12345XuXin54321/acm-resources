@@ -3,6 +3,7 @@
 ## 题意
 
 有一个数列 $a_n$ ，满足
+
 $$
 a_x = 
 \begin{cases}
@@ -10,11 +11,13 @@ a_x =
     a_{x-1} + a_{x-3} & x \geq 4
 \end{cases}
 $$
+
 求数列的第 $n$ 项对 $10^9+7$ 取余的值。
 
 ## 思路
 
 设初始矩阵
+
 $$
 \pmb{b} = 
 \begin{pmatrix}
@@ -23,6 +26,7 @@ $$
 $$
 
 设矩阵 $\pmb{A}$ ，使
+
 $$ \pmb{bA} = 
 \begin{pmatrix}
     a_{n-1} & a_n & a_{n+1}
@@ -30,6 +34,7 @@ $$ \pmb{bA} =
 $$
 
 解得
+
 $$ \pmb{A} = 
 \begin{pmatrix}
     0 & 0 & 1 \\
