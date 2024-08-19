@@ -4,7 +4,10 @@
 
 有三个集合，用 $A, B, C$ 表示，
 如果想要知道它们的并集里面有多少个元素，
-也就是要求 $ | A \cup B \cup C | $
+也就是要求
+
+$$ | A \cup B \cup C | $$
+
 ，应该怎样计算？
 
 如果正向来做，把集合根据和其它集合的交集来分割，再进行计算，
@@ -19,11 +22,11 @@
 
 $$
 | A \cup B \cup C | =
-|A| + |B| + |C|
-- | A \cup B |
-- | B \cup C |
-- | C \cup A |
-+ | A \cup B \cup C |
+|A| + |B| + |C|- 
+| A \cup B | - 
+| B \cup C | - 
+| C \cup A | + 
+| A \cup B \cup C |
 $$
 
 ![图解](https://oi-wiki.org/math/combinatorics/images/incexcp.png)
@@ -40,25 +43,25 @@ $$
 $$
 \left|
   \bigcup^n_{i=1} S_i
-\right|
-=
-\sum_i |S_i|
-- \sum_{i < j} | S_i \cap S_j |
-+ \sum_{i < j < k} | S_i \cap S_j \cap S_k |
-- \dots
-+ (-1)^{m-1} \sum_{a_i < a_{i+1}}
+\right| =
+\sum_i |S_i| - 
+\sum_{i < j} | S_i \cap S_j | + 
+\sum_{i < j < k} | S_i \cap S_j \cap S_k | - 
+\dots + 
+(-1)^{m-1} \sum_{a_i < a_{i+1}}
 \left|
   \bigcap^m_{i=1} S_{a_i}
-\right|
-+ \dots
-+ (-1)^{n-1} | S_1 \cap \dots \cap S_n |
+\right| + 
+\dots + 
+(-1)^{n-1} | S_1 \cap \dots \cap S_n |
 $$
+
+也就是
 
 $$
 \left|
   \bigcup^n_{i=1} S_i
-\right|
-=
+\right| =
 \sum^m_{m=1}
 (-1)^{m-1} \sum_{a_i < a_{i+1}}
 \left|
@@ -80,6 +83,7 @@ $$
 ，可以得到容斥系数为 $ (-1)^{m+1} 2^{m-1} $
 
 可得
+
 $$
 | XOR^n_{i=1} A_i | =
 \sum_{S \neq \emptyset, S \subset [n] }
