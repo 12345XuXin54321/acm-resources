@@ -3,7 +3,7 @@
 // 初始化数组
 // 区间加
 // 求区间和
-struct SegmentTree
+class SegmentTree
 {
 #define Lch(ind) ((ind) * 2)
 #define Rch(ind) ((ind) * 2 + 1)
@@ -12,6 +12,8 @@ struct SegmentTree
         int sum;
         int lazy;
     } node_arr[max_len * 4];
+
+    int ind_L, ind_R;
 
     void push_down(int now_i, int l, int r)
     {
@@ -106,5 +108,22 @@ struct SegmentTree
                 return (lv + rv) + node_arr[now_i].lazy * (qr - ql + 1);
             }
         }
+    }
+
+public:
+    void build_tree(int l, int r, int *arr)
+    {
+        ind_L = l, ind_R = r;
+        build_tree(1, ind_L, ind_R, arr);
+    }
+
+    void add_val(int cl, int cr, int d)
+    {
+        add_val(1, ind_L, ind_R, cl, cr, d);
+    }
+
+    int query_sum(int ql, int qr)
+    {
+        return query_sum(1, ind_L, ind_R, ql, qr);
     }
 };
