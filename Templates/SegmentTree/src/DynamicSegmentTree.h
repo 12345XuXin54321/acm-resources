@@ -11,13 +11,7 @@ class DynamicSegmentTree
         int sum;
         int lazy;
 
-        int64_t l, r;
         int lch = -1, rch = -1;
-
-        int get_mid() const
-        {
-            return (l + r) / 2;
-        }
     };
 
     vector<tree_node> node_arr;
@@ -35,8 +29,6 @@ class DynamicSegmentTree
         if (lch == -1)
         {
             lch = create_new_node();
-            node_arr[lch].l = node_arr[now_i].l;
-            node_arr[lch].r = node_arr[now_i].get_mid();
             node_arr[now_i].lch = lch;
         }
         return lch;
@@ -47,8 +39,6 @@ class DynamicSegmentTree
         if (rch == -1)
         {
             rch = create_new_node();
-            node_arr[rch].l = node_arr[now_i].get_mid() + 1;
-            node_arr[rch].r = node_arr[now_i].r;
             node_arr[now_i].rch = rch;
         }
         return rch;
@@ -62,11 +52,9 @@ class DynamicSegmentTree
         return node_arr[now_i].rch != -1;
     }
 
-    void push_down(int now_i)
+    void push_down(int now_i, int64_t l, int64_t r)
     {
-        int l = node_arr[now_i].l;
-        int r = node_arr[now_i].r;
-        int mid = node_arr[now_i].get_mid();
+        int64_t mid = (l + r) / 2;
         node_arr[Lch(now_i)].sum += node_arr[now_i].lazy * (mid - l + 1);
         node_arr[Lch(now_i)].lazy += node_arr[now_i].lazy;
 
@@ -76,10 +64,8 @@ class DynamicSegmentTree
         node_arr[now_i].lazy = 0;
     }
 
-    void push_up(int now_i)
+    void push_up(int now_i, int64_t l, int64_t r)
     {
-        int l = node_arr[now_i].l;
-        int r = node_arr[now_i].r;
         int lv = 0, rv = 0;
         if (has_Lch(now_i))
             lv = node_arr[Lch(now_i)].sum;
@@ -89,10 +75,8 @@ class DynamicSegmentTree
                               node_arr[now_i].lazy * (r - l + 1);
     }
 
-    void add_val(int now_i, int cl, int cr, int d)
+    void add_val(int now_i, int64_t l, int64_t r, int cl, int cr, int d)
     {
-        int l = node_arr[now_i].l;
-        int r = node_arr[now_i].r;
         if (l == cl && r == cr)
         {
             node_arr[now_i].sum += d * (r - l + 1);
@@ -100,59 +84,57 @@ class DynamicSegmentTree
         }
         else
         {
-            push_down(now_i);
+            push_down(now_i, l, r);
 
-            int mid = node_arr[now_i].get_mid();
+            int64_t mid = (l + r) / 2;
             if (cr <= mid)
             {
-                add_val(Lch(now_i), cl, cr, d);
+                add_val(Lch(now_i), l, mid, cl, cr, d);
             }
             else if (cl > mid)
             {
-                add_val(Rch(now_i), cl, cr, d);
+                add_val(Rch(now_i), mid + 1, r, cl, cr, d);
             }
             else
             {
-                add_val(Lch(now_i), cl, mid, d);
-                add_val(Rch(now_i), mid + 1, cr, d);
+                add_val(Lch(now_i), l, mid, cl, mid, d);
+                add_val(Rch(now_i), mid + 1, r, mid + 1, cr, d);
             }
 
-            push_up(now_i);
+            push_up(now_i, l, r);
         }
     }
 
-    int query_sum(int now_i, int ql, int qr)
+    int query_sum(int now_i, int64_t l, int64_t r, int ql, int qr)
     {
-        int l = node_arr[now_i].l;
-        int r = node_arr[now_i].r;
         if (l == ql && r == qr)
         {
             return node_arr[now_i].sum;
         }
         else
         {
-            int mid = node_arr[now_i].get_mid();
+            int64_t mid = (l + r) / 2;
             if (qr <= mid)
             {
                 int lv = 0;
                 if (has_Lch(now_i))
-                    lv = query_sum(Lch(now_i), ql, qr);
+                    lv = query_sum(Lch(now_i), l, mid, ql, qr);
                 return lv + node_arr[now_i].lazy * (qr - ql + 1);
             }
             else if (ql > mid)
             {
                 int rv = 0;
                 if (has_Rch(now_i))
-                    rv = query_sum(Rch(now_i), ql, qr);
+                    rv = query_sum(Rch(now_i), mid + 1, r, ql, qr);
                 return rv + node_arr[now_i].lazy * (qr - ql + 1);
             }
             else
             {
                 int lv = 0, rv = 0;
                 if (has_Lch(now_i))
-                    lv = query_sum(Lch(now_i), ql, mid);
+                    lv = query_sum(Lch(now_i), l, mid, ql, mid);
                 if (has_Rch(now_i))
-                    rv = query_sum(Rch(now_i), mid + 1, qr);
+                    rv = query_sum(Rch(now_i), mid + 1, r, mid + 1, qr);
                 return (lv + rv) + node_arr[now_i].lazy * (qr - ql + 1);
             }
         }
@@ -163,17 +145,15 @@ public:
     {
         node_arr.clear();
         int root_i = create_new_node();
-        node_arr[root_i].l = ind_L;
-        node_arr[root_i].r = ind_R;
     }
 
     void add_val(int cl, int cr, int d)
     {
-        add_val(0, cl, cr, d);
+        add_val(0, ind_L, ind_R, cl, cr, d);
     }
 
     int query_sum(int ql, int qr)
     {
-        return query_sum(0, ql, qr);
+        return query_sum(0, ind_L, ind_R, ql, qr);
     }
 };
