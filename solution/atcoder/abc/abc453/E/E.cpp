@@ -1,0 +1,223 @@
+#include <bits/stdc++.h>
+using namespace std;
+#define int int64_t
+#define max_len 200010
+
+#define mod_n 998244353
+#define mod(x) ((x) % mod_n)
+
+// 初始化数组
+// 区间加
+// 求区间和
+class SegmentTree
+{
+#define Lch(ind) ((ind) * 2)
+#define Rch(ind) ((ind) * 2 + 1)
+    struct tree_node
+    {
+        int sum;
+        int lazy;
+    } node_arr[max_len * 4];
+
+    int ind_L, ind_R;
+
+    void push_down(int now_i, int l, int r)
+    {
+        int mid = (l + r) / 2;
+        node_arr[Lch(now_i)].sum += node_arr[now_i].lazy * (mid - l + 1);
+        node_arr[Lch(now_i)].lazy += node_arr[now_i].lazy;
+
+        node_arr[Rch(now_i)].sum += node_arr[now_i].lazy * (r - mid);
+        node_arr[Rch(now_i)].lazy += node_arr[now_i].lazy;
+
+        node_arr[now_i].lazy = 0;
+    }
+
+    void push_up(int now_i, int l, int r)
+    {
+        node_arr[now_i].sum = node_arr[Lch(now_i)].sum +
+                              node_arr[Rch(now_i)].sum +
+                              node_arr[now_i].lazy * (r - l + 1);
+    }
+
+    void build_tree(int now_i, int l, int r)
+    {
+        if (l == r)
+        {
+            node_arr[now_i].sum = 0;
+            node_arr[now_i].lazy = 0;
+        }
+        else
+        {
+            node_arr[now_i].lazy = 0;
+
+            int mid = (l + r) / 2;
+            build_tree(Lch(now_i), l, mid);
+            build_tree(Rch(now_i), mid + 1, r);
+            push_up(now_i, l, r);
+        }
+    }
+
+    void add_val(int now_i, int l, int r, int cl, int cr, int d)
+    {
+        if (l == cl && r == cr)
+        {
+            node_arr[now_i].sum += d * (r - l + 1);
+            node_arr[now_i].lazy += d;
+        }
+        else
+        {
+            push_down(now_i, l, r);
+
+            int mid = (l + r) / 2;
+            if (cr <= mid)
+            {
+                add_val(Lch(now_i), l, mid, cl, cr, d);
+            }
+            else if (cl > mid)
+            {
+                add_val(Rch(now_i), mid + 1, r, cl, cr, d);
+            }
+            else
+            {
+                add_val(Lch(now_i), l, mid, cl, mid, d);
+                add_val(Rch(now_i), mid + 1, r, mid + 1, cr, d);
+            }
+
+            push_up(now_i, l, r);
+        }
+    }
+
+    int query_sum(int now_i, int l, int r, int ql, int qr)
+    {
+        if (l == ql && r == qr)
+        {
+            return node_arr[now_i].sum;
+        }
+        else
+        {
+            int mid = (l + r) / 2;
+            if (qr <= mid)
+            {
+                return query_sum(Lch(now_i), l, mid, ql, qr) +
+                       node_arr[now_i].lazy * (qr - ql + 1);
+            }
+            else if (ql > mid)
+            {
+                return query_sum(Rch(now_i), mid + 1, r, ql, qr) +
+                       node_arr[now_i].lazy * (qr - ql + 1);
+            }
+            else
+            {
+                int lv = query_sum(Lch(now_i), l, mid, ql, mid);
+                int rv = query_sum(Rch(now_i), mid + 1, r, mid + 1, qr);
+                return (lv + rv) + node_arr[now_i].lazy * (qr - ql + 1);
+            }
+        }
+    }
+
+public:
+    void build_tree(int l, int r)
+    {
+        ind_L = l, ind_R = r;
+        build_tree(1, ind_L, ind_R);
+    }
+
+    void add_val(int cl, int cr, int d)
+    {
+        add_val(1, ind_L, ind_R, cl, cr, d);
+    }
+
+    int query_sum(int ql, int qr)
+    {
+        return query_sum(1, ind_L, ind_R, ql, qr);
+    }
+};
+
+int qpow(int x, int n)
+{
+    if (n == 0)
+        return 1;
+    else if (n == 1)
+        return mod(x);
+    else if (n % 2 == 0)
+        return qpow(mod(x * x), n / 2);
+    else
+        return mod(x * qpow(mod(x * x), n / 2));
+}
+
+int inv(int x)
+{
+    return qpow(x, mod_n - 2);
+}
+
+int fact[max_len];
+void init_fact()
+{
+    fact[0] = fact[1] = 1;
+    for (int i = 2; i < max_len; i++)
+    {
+        fact[i] = mod(fact[i - 1] * i);
+    }
+}
+
+int C(int n, int m)
+{
+    return mod(fact[n] * inv(mod(fact[m] * fact[n - m])));
+}
+
+SegmentTree inc_lr, inc_cnt;
+int N;
+
+int get_ans()
+{
+    int ans = 0;
+    for (int Acnt = 1; Acnt < N; Acnt++)
+    {
+        int Bcnt = N - Acnt;
+        int both_cnt = inc_lr.query_sum(Acnt, Acnt);
+        int cnt1 = inc_cnt.query_sum(Acnt, Acnt);
+        int cnt2 = inc_cnt.query_sum(Bcnt, Bcnt);
+        if (cnt1 + cnt2 - both_cnt == N)
+        {
+            int a_need = Acnt - (cnt1 - both_cnt);
+            if (both_cnt >= a_need && a_need >= 0 && both_cnt >= 0)
+            {
+                ans += C(both_cnt, a_need);
+                ans = mod(ans);
+            }
+        }
+    }
+    return ans;
+}
+
+void sol()
+{
+    cin >> N;
+    inc_lr.build_tree(1, N);
+    inc_cnt.build_tree(1, N);
+    for (int i = 0; i < N; i++)
+    {
+        int l, r;
+        cin >> l >> r;
+        int beg = max(l, N - r);
+        if (beg * 2 <= N)
+            inc_lr.add_val(beg, N - beg, 1);
+        inc_cnt.add_val(l, r, 1);
+    }
+    int ans = get_ans();
+    cout << ans << "\n";
+}
+
+int32_t main()
+{
+    init_fact();
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+    int T = 1;
+    // cin >> T;
+    while (T--)
+    {
+        sol();
+    }
+}
