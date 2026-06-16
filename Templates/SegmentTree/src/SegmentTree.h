@@ -6,15 +6,23 @@ using namespace std;
 
 struct NodeTag
 {
+    bool need_reset;
     int add;
 
     NodeTag() = default;
-    NodeTag(int _add) : add(_add) {}
+    NodeTag(int _add) : need_reset(false), add(_add) {}
 
     // 先应用当前tag，再应用other
     void compose(const NodeTag &other)
     {
-        add += other.add;
+        if (other.need_reset)
+        {
+            *this = other;
+        }
+        else
+        {
+            add += other.add;
+        }
     }
 };
 
@@ -37,6 +45,11 @@ struct NodeInfo
 
     NodeInfo &apply(const NodeTag &t, int len)
     {
+        if (t.need_reset)
+        {
+            *this = NodeInfo();
+        }
+
         max_val += t.add;
         min_val += t.add;
         sum += (t.add * len);
