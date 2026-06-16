@@ -24,14 +24,14 @@ struct NodeInfo
     int max_val, min_val;
 
     NodeInfo() = default;
-    NodeInfo(int _sum, int _max, int _min) : sum(_sum), max_val(_max), min_val(_min) {}
+    NodeInfo(int _val) : sum(_val), max_val(_val), min_val(_val) {}
 
     static NodeInfo merge(const NodeInfo &a, const NodeInfo &b)
     {
-        NodeInfo res(
-            a.sum + b.sum,
-            max(a.max_val, b.max_val),
-            min(a.min_val, b.min_val));
+        NodeInfo res;
+        res.sum = a.sum + b.sum;
+        res.max_val = max(a.max_val, b.max_val);
+        res.min_val = min(a.min_val, b.min_val);
         return res;
     }
 
@@ -84,7 +84,7 @@ class SegmentTree
     {
         if (l == r)
         {
-            node_arr[now_i].info = NodeInfo(arr[l], arr[l], arr[l]);
+            node_arr[now_i].info = NodeInfo(arr[l]);
             node_arr[now_i].tag = NodeTag();
         }
         else
