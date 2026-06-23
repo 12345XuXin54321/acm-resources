@@ -2,7 +2,7 @@
 
 using namespace std;
 
-vector<int> z_func(const string &str)
+vector<int> z_func(const string_view &str)
 {
     int len = str.size();
     vector<int> z(len, 0);
