@@ -62,8 +62,9 @@ struct NodeInfo
 // 求区间和
 class SegmentTree
 {
-#define Lch(ind) ((ind) * 2)
-#define Rch(ind) ((ind) * 2 + 1)
+    static constexpr int Lch(int idx) noexcept { return idx * 2; }
+    static constexpr int Rch(int idx) noexcept { return idx * 2 + 1; }
+
     struct tree_node
     {
         NodeInfo info;
