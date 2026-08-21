@@ -4,7 +4,7 @@ using namespace std;
 template <typename T>
 constexpr T qpow(T x, uint64_t n)
 {
-    T res{1};
+    T res(1);
     for (; n != 0; n /= 2, x *= x)
     {
         if (n % 2 == 1)
@@ -20,7 +20,7 @@ class ModInt
 {
     T x;
 
-    constexpr T mod(const T v)
+    constexpr T mod(const int64_t v)
     {
         T res = v % ModP;
         if (res < 0)
@@ -30,7 +30,7 @@ class ModInt
 
 public:
     constexpr ModInt() = default;
-    constexpr ModInt(T v)
+    constexpr ModInt(const int64_t v)
     {
         x = mod(v);
     }
@@ -56,7 +56,7 @@ public:
     }
     constexpr ModInt &operator*=(const ModInt &rhs)
     {
-        x = mod(x * rhs.x);
+        x = mod((int64_t)x * rhs.x);
         return *this;
     }
     constexpr ModInt &operator/=(const ModInt &rhs)
