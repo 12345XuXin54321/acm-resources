@@ -57,9 +57,7 @@ struct NodeInfo
     }
 };
 
-// 初始化数组
-// 区间加
-// 求区间和
+template <typename InfoType, typename TagType>
 class SegmentTree
 {
     static constexpr int Lch(int idx) noexcept { return idx * 2; }
@@ -67,8 +65,8 @@ class SegmentTree
 
     struct tree_node
     {
-        NodeInfo info;
-        NodeTag tag;
+        InfoType info;
+        TagType tag;
     } node_arr[max_len * 4];
 
     int ind_L, ind_R;
@@ -84,13 +82,13 @@ class SegmentTree
         node_arr[Lch(now_i)].tag.compose(tag);
         node_arr[Rch(now_i)].tag.compose(tag);
 
-        tag = NodeTag();
+        tag = TagType();
     }
 
     void push_up(int now_i, int l, int r)
     {
         node_arr[now_i].info =
-            NodeInfo::merge(node_arr[Lch(now_i)].info, node_arr[Rch(now_i)].info)
+            InfoType::merge(node_arr[Lch(now_i)].info, node_arr[Rch(now_i)].info)
                 .apply(node_arr[now_i].tag, r - l + 1);
     }
 
@@ -98,12 +96,12 @@ class SegmentTree
     {
         if (l == r)
         {
-            node_arr[now_i].info = NodeInfo(arr[l]);
-            node_arr[now_i].tag = NodeTag();
+            node_arr[now_i].info = InfoType(arr[l]);
+            node_arr[now_i].tag = TagType();
         }
         else
         {
-            node_arr[now_i].tag = NodeTag();
+            node_arr[now_i].tag = TagType();
 
             int mid = (l + r) / 2;
             build_tree(Lch(now_i), l, mid, arr);
@@ -112,7 +110,7 @@ class SegmentTree
         }
     }
 
-    void range_update(int now_i, int l, int r, int cl, int cr, const NodeTag &t)
+    void range_update(int now_i, int l, int r, int cl, int cr, const TagType &t)
     {
         if (l == cl && r == cr)
         {
@@ -142,7 +140,7 @@ class SegmentTree
         }
     }
 
-    NodeInfo query(int now_i, int l, int r, int ql, int qr)
+    InfoType query(int now_i, int l, int r, int ql, int qr)
     {
         if (l == ql && r == qr)
         {
@@ -165,7 +163,7 @@ class SegmentTree
             {
                 auto lv = query(Lch(now_i), l, mid, ql, mid);
                 auto rv = query(Rch(now_i), mid + 1, r, mid + 1, qr);
-                return NodeInfo::merge(lv, rv).apply(node_arr[now_i].tag, len);
+                return InfoType::merge(lv, rv).apply(node_arr[now_i].tag, len);
             }
         }
     }
@@ -177,12 +175,12 @@ public:
         build_tree(1, ind_L, ind_R, arr);
     }
 
-    void range_update(int cl, int cr, const NodeTag &t)
+    void range_update(int cl, int cr, const TagType &t)
     {
         range_update(1, ind_L, ind_R, cl, cr, t);
     }
 
-    NodeInfo query(int ql, int qr)
+    InfoType query(int ql, int qr)
     {
         return query(1, ind_L, ind_R, ql, qr);
     }
